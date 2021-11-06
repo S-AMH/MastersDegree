@@ -1,23 +1,65 @@
+# Written by S.AmirMohammad Hasanli (amir.hasanli@ut.ac.ir)
+# GNU General Public License v2.0
+# This document is available online at following public repository:
+# https://github.com/S-AMH/MastersDegree/blob/main/CalculateAET.py
 # 2021-Nov-5
 
-days = int(input("Please enter number of days:"))
-RC = float(input("Please enter RC:"))
-AWC = float(input("Please enter AWC:"))
+def validate (input, inputName, lowerBoundry = None, upperBoundry = None, upperEqual = False, lowerEqual = False): # Validates input with given boundries
+    counter = 0
+    if lowerBoundry != None:
+        if lowerEqual:
+            if input >= lowerBoundry:
+                counter += 1
+            else:
+                print("Error: Invalid " + inputName)
+                exit()
+        else:
+            if input > lowerBoundry:
+                counter += 1
+            else:
+                print("Error: Invalid " + inputName)
+                exit()
+    else:
+        counter += 1
+    if upperBoundry != None:
+        if upperEqual:
+            if input <= upperBoundry:
+                counter += 1
+            else:
+                print("Error: Invalid " + inputName)
+                exit()
+        else:
+            if input < upperBoundry:
+                counter += 1
+            else:
+                print("Error: Invalid " + inputName)
+                exit()
+    else:
+        counter += 1
+    if counter == 2:
+        return input
 
-CRF = 0.0
-PRF = 0.0
-PR = 0.0
-PD = 0.0
-PAET = 0.0
+print("Initializing field variables:")
 
-for i in range(0,days):
+days = validate(int(input("\tPlease enter number of days:")), "days", lowerBoundry = 0, lowerEqual = False) # Number of days which cycle continous
+RC = validate(float(input("\tPlease enter RC:")), "RC", lowerBoundry = 0.0, lowerEqual = True) # Soil Water Holding Capacity
+KC = validate(float(input("\tPlease enter KC:")), "KC", lowerBoundry = 0.0, lowerEqual = True) # Crop Coefficient
+FC = validate(float(input("\tPlease enter FC:")), "FC", lowerBoundry = 0.0, lowerEqual = True) # Field Capacity
+PWP = validate(float(input("\tPlease enter PWP:")), "PWP", lowerBoundry = 0.0, lowerEqual = True) # Permanent Wilting Point
+
+AWC = validate(FC - PWP, "AWC", lowerBoundry = 0.0, lowerEqual = False) # Calculating Available Water Content
+
+CRF = 0.0 # Cumulative Rainfall
+PRF = 0.0  # Previous Rainfall
+PR = 0.0 # Previous R
+PD = 0.0 # Previous D
+PAET = 0.0 # Previous Actual EvapoTranspiration
+
+for i in range(0, days):
     print("\nDay #" + str(i+1))
 
-    PET = float(input("Please enter PET:"))
-    KC = float(input("Please enter KC:"))
-    FC = float(input("Please enter FC:"))
-    PWP = float(input("Please enter PWP:"))
-    RF = float(input("Please enter RF:"))
+    PET = validate(float(input("Please enter PET:"), "PET")) # Potential EvapoTranspiration
+    RF = validate(float(input("Please enter RF:")), "RF", lowerBoundry = 0.0, lowerEqual = True) # Rainfall
 
     if CRF > 15.0:
         ETM = KC * PET
@@ -42,4 +84,3 @@ for i in range(0,days):
         AET = 0.2 * PET
     print("AET = " + str(AET) + "\n")
     CRF += RF
-
