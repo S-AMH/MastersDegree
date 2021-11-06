@@ -1,6 +1,3 @@
-# Written by S.AmirMohammad Hasanli. (amir.hasanli@ut.ac.ir)
-# The code is availiable at following Github public repository:
-# https://github.com/S-AMH/MastersDegree
 # 2021-Nov-5
 
 days = int(input("Please enter number of days:"))
